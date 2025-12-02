@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:8080';
 
 // Health check endpoint - placed before CORS to ensure it's always accessible
+// Handle both GET and OPTIONS (preflight) requests
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
@@ -19,14 +20,22 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
+// Handle OPTIONS preflight for health endpoint
+app.options('/api/health', (_req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(204);
+});
+
 // Parse FRONTEND_URL to support multiple origins (comma-separated)
 const allowedOrigins = FRONTEND_URL.split(',').map(url => url.trim());
 
 // CORS configuration with support for multiple origins
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    // Allow requests with no origin (like mobile apps, Postman, health checks, etc.)
-    // This is safe because we validate origins when they are provided
+    // Always allow requests with no origin (like mobile apps, Postman, health checks, monitoring tools, etc.)
+    // This is necessary for health checks and monitoring services
     if (!origin) {
       return callback(null, true);
     }
@@ -35,6 +44,11 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      // Log the rejected origin for debugging (but don't expose in production)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('CORS rejected origin:', origin);
+        console.log('Allowed origins:', allowedOrigins);
+      }
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -43,8 +57,14 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-// Middleware
-app.use(cors(corsOptions));
+// Apply CORS middleware, but skip it for health endpoint to avoid any issues
+app.use((req, res, next) => {
+  // Completely bypass CORS for health endpoint
+  if (req.path === '/api/health') {
+    return next();
+  }
+  return cors(corsOptions)(req, res, next);
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

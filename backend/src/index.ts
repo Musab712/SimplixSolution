@@ -35,8 +35,13 @@ app.options('/api/health', (_req, res) => {
 // Parse FRONTEND_URL to support multiple origins (comma-separated)
 const allowedOrigins = FRONTEND_URL.split(',').map(url => url.trim());
 
+// Add Railway and common monitoring origins to allowed list for production
+if (process.env.NODE_ENV === 'production') {
+  // Allow Railway's internal health checks and common monitoring services
+  allowedOrigins.push('https://railway.app', 'https://*.railway.app');
+}
+
 // CORS configuration with support for multiple origins
-// The origin callback needs to allow health checks from any origin
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
     // Always allow requests with no origin (like mobile apps, Postman, health checks, monitoring tools, etc.)
@@ -49,11 +54,9 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      // Log the rejected origin for debugging (but don't expose in production)
-      if (process.env.NODE_ENV === 'development') {
-        console.log('CORS rejected origin:', origin);
-        console.log('Allowed origins:', allowedOrigins);
-      }
+      // Log the rejected origin for debugging
+      console.log('CORS rejected origin:', origin);
+      console.log('Allowed origins:', allowedOrigins);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -62,10 +65,22 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-// Custom CORS middleware that skips health endpoint
+// Apply JSON parsing middleware first (needed for all routes)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Apply CORS middleware with health endpoint exclusion
+// This middleware runs for all requests, but we check the path first
 app.use((req, res, next) => {
-  // Completely bypass CORS for health endpoint
-  if (req.path === '/api/health') {
+  // Completely skip CORS for health endpoint - check multiple path variations
+  const isHealthEndpoint = req.path === '/api/health' || 
+                          req.path === '/health' ||
+                          req.url === '/api/health' || 
+                          req.url === '/health' ||
+                          req.originalUrl === '/api/health' ||
+                          req.originalUrl?.startsWith('/api/health');
+  
+  if (isHealthEndpoint) {
     // Set permissive headers for health checks
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -76,15 +91,13 @@ app.use((req, res, next) => {
       return res.sendStatus(204);
     }
     
+    // Continue to next middleware/route handler
     return next();
   }
   
   // Apply CORS for all other routes
   return cors(corsOptions)(req, res, next);
 });
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // API Routes
 // Note: Rate limiting is applied in the route AFTER validation

@@ -47,11 +47,11 @@ const Contact = () => {
       if (phoneTrimmed.length > 20) {
         newErrors.phone = "Phone number must be less than 20 characters";
       } else {
-        // International phone format validation (matches backend: 7-15 digits)
+        // International phone format validation
+        const phoneRegex = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
         const cleanedPhone = phoneTrimmed.replace(/[\s\-\(\)]/g, '');
-        const phoneRegex = /^[\+]?[0-9]{7,15}$/;
         if (!phoneRegex.test(cleanedPhone)) {
-          newErrors.phone = "Please enter a valid phone number (7-15 digits)";
+          newErrors.phone = "Please enter a valid phone number";
         }
       }
     }
@@ -86,15 +86,12 @@ const Contact = () => {
     setErrors({});
 
     try {
-      // Sanitize data before submission
-      const sanitizedData = {
-        name: sanitizeName(formData.name),
-        email: sanitizeEmail(formData.email),
-        phone: formData.phone ? sanitizePhone(formData.phone) : undefined,
-        message: sanitizeMessage(formData.message),
-      };
-
-      const response = await submitContactForm(sanitizedData);
+      const response = await submitContactForm({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim() || undefined,
+        message: formData.message.trim(),
+      });
 
       toast({
         title: "Message sent!",
@@ -130,11 +127,29 @@ const Contact = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     
-    // Don't sanitize while typing - let user type naturally
-    // Sanitization will happen on submit
+    // Apply sanitization based on field type
+    let sanitizedValue = value;
+    switch (name) {
+      case 'name':
+        sanitizedValue = sanitizeName(value);
+        break;
+      case 'email':
+        sanitizedValue = sanitizeEmail(value);
+        break;
+      case 'phone':
+        sanitizedValue = sanitizePhone(value);
+        break;
+      case 'message':
+        // For message, we sanitize but preserve user input more
+        sanitizedValue = sanitizeMessage(value);
+        break;
+      default:
+        sanitizedValue = value;
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [name]: sanitizedValue,
     }));
 
     // Clear error when user starts typing

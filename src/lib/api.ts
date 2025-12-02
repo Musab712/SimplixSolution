@@ -27,21 +27,9 @@ export const submitContactForm = async (
     body: JSON.stringify(data),
   });
 
-  // Handle non-JSON responses
-  const contentType = response.headers.get('content-type');
-  if (!contentType || !contentType.includes('application/json')) {
-    const text = await response.text();
-    throw new Error(text || `Server error: ${response.status} ${response.statusText}`);
-  }
-
   const result: ContactFormResponse = await response.json();
 
   if (!response.ok) {
-    // If there are field-specific errors, include them in the error message
-    if (result.errors && result.errors.length > 0) {
-      const errorMessages = result.errors.map(err => `${err.field}: ${err.message}`).join(', ');
-      throw new Error(errorMessages);
-    }
     throw new Error(result.message || 'Failed to submit form');
   }
 

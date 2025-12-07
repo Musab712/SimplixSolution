@@ -40,6 +40,20 @@ export const useScrollSpy = ({
         return;
       }
 
+      // Check if we're scrolling to a specific section via hash
+      const hash = window.location.hash.replace('#', '').split('?')[0];
+      if (hash && sectionIds.includes(hash)) {
+        const hashElement = document.querySelector(`#${hash}`);
+        if (hashElement) {
+          const hashRect = hashElement.getBoundingClientRect();
+          // If hash section is in viewport or very close, prioritize it
+          if (hashRect.top < window.innerHeight && hashRect.bottom > 0) {
+            setActiveSection(hash);
+            return;
+          }
+        }
+      }
+
       // Check each section to find which one is closest to the top of viewport
       sectionIds.forEach((sectionId) => {
         const element = document.querySelector(`#${sectionId}`);
@@ -48,7 +62,10 @@ export const useScrollSpy = ({
           const elementTop = window.scrollY + rect.top;
           
           // Check if section is in viewport (top of section is above offset, bottom is below)
-          const isInViewport = rect.top <= offset && rect.bottom >= offset;
+          // Use stricter criteria: section must have significant portion visible
+          const sectionHeight = rect.height;
+          const visibleHeight = Math.min(rect.bottom, offset + 100) - Math.max(rect.top, offset);
+          const isInViewport = rect.top <= offset + 50 && rect.bottom >= offset && visibleHeight > sectionHeight * 0.3;
           
           if (isInViewport) {
             // If section is in viewport, calculate distance from top
@@ -57,8 +74,8 @@ export const useScrollSpy = ({
               minDistance = distance;
               activeId = sectionId;
             }
-          } else if (rect.top > 0 && rect.top < offset * 2) {
-            // Section is approaching viewport from below
+          } else if (rect.top > 0 && rect.top < offset * 2 && rect.top > offset - 100) {
+            // Section is approaching viewport from below, but only if it's the closest
             const distance = Math.abs(rect.top - offset);
             if (distance < minDistance) {
               minDistance = distance;

@@ -13,10 +13,22 @@ const Hero = () => {
     setIsVisible(true);
   }, []);
 
-  const scrollToContact = () => {
+  const scrollToContact = (action?: 'call' | 'demo') => {
     const element = document.querySelector("#contact");
     if (element) {
+      // Set hash with action parameter to trigger animations
+      if (action === 'call') {
+        window.location.hash = 'contact?action=call';
+      } else if (action === 'demo') {
+        window.location.hash = 'contact?action=demo';
+      } else {
+        window.location.hash = 'contact';
+      }
       element.scrollIntoView({ behavior: "smooth" });
+      // Clear hash after animation completes
+      setTimeout(() => {
+        window.history.replaceState(null, '', window.location.pathname);
+      }, 6000);
     }
   };
 
@@ -408,7 +420,7 @@ const Hero = () => {
           <div className={`flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-1000 delay-500 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
             <MagneticButton
               size="lg"
-              onClick={scrollToContact}
+              onClick={() => scrollToContact('call')}
               threshold={120}
               springStrength={0.2}
               damping={0.75}
@@ -420,7 +432,7 @@ const Hero = () => {
             <MagneticButton
               size="lg"
               variant="outline"
-              onClick={scrollToContact}
+              onClick={() => scrollToContact('demo')}
               threshold={120}
               springStrength={0.2}
               damping={0.75}

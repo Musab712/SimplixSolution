@@ -1,56 +1,55 @@
 import { useEffect, useRef, useState } from "react";
 import { Mic, Workflow, TrendingUp, FileText } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import StaggerContainer from "./StaggerContainer";
 
 const services = [
   {
     icon: Mic,
     title: "AI Voice & Support Agents",
     description:
-      "Handle 80% of customer inquiries automatically. 24/7 support in 50+ languages, instant responses, seamless human handoff when needed.",
-    useCases: "Customer support | Global SaaS | E-commerce | Service scheduling",
+      "24/7 automated customer support in 50+ languages with instant responses and seamless human handoff.",
+    useCases: "Customer support | E-commerce | Service scheduling",
     outcomes: [
-      "80% of tickets resolved automatically",
-      "2-second response time, 24/7",
+      "80% tickets resolved automatically",
       "70% cost reduction",
     ],
+    animation: "slideFromLeft",
   },
   {
     icon: Workflow,
     title: "Business Workflow Automation",
     description:
-      "Automate end-to-end processes. Zero manual errors, real-time visibility, complete audit trails. Your workflows run flawlessly 24/7.",
-    useCases: "Onboarding | Invoicing | Reporting | Data sync",
+      "Automate end-to-end processes with zero errors, real-time visibility, and complete audit trails.",
+    useCases: "Onboarding | Invoicing | Data sync",
     outcomes: [
       "100% error elimination",
       "10x faster execution",
-      "Real-time monitoring dashboard",
     ],
+    animation: "slideFromRight",
   },
   {
     icon: TrendingUp,
     title: "Sales & Lead Automation",
     description:
-      "Never miss a lead. Instant qualification, automated CRM updates, personalized follow-ups, and meeting scheduling — so your team can focus on closing.",
-    useCases: "Lead qualification | CRM automation | Meeting scheduling | Pipeline management",
+      "Never miss a lead with instant qualification, automated CRM updates, and personalised follow-ups.",
+    useCases: "Lead qualification | CRM automation | Meeting scheduling",
     outcomes: [
       "100% leads contacted in 60 seconds",
       "3x higher conversion rates",
-      "5+ hours saved per rep weekly",
     ],
+    animation: "fadeScale",
   },
   {
     icon: FileText,
     title: "Data + Document Intelligence",
     description:
-      "Process thousands of documents in minutes. 99.9% accuracy, automatic extraction, compliance-ready audit trails, instant BI integration.",
-    useCases: "Invoices | Contracts | Forms | Reports | Compliance docs",
+      "Process thousands of documents in minutes with 99.9% accuracy and automatic extraction.",
+    useCases: "Invoices | Contracts | Forms | Reports",
     outcomes: [
       "1,000+ docs/hour processed",
-      "90% time reduction",
       "99.9% accuracy rate",
     ],
+    animation: "rotateFade",
   },
 ];
 
@@ -103,52 +102,89 @@ const Services = () => {
           </p>
         </div>
 
-        <StaggerContainer
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10"
-          staggerDelay={100}
-          initialDelay={300}
-          threshold={0.1}
-        >
-          {services.map((service) => (
-            <Card
-              key={service.title}
-              className="service-card bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-glow group cursor-pointer h-full"
-            >
-              <CardContent className="p-8 space-y-6 h-full flex flex-col">
-                <div className="flex items-start gap-6">
-                  <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300 flex-shrink-0">
-                    <service.icon className="w-8 h-8 text-primary group-hover:text-primary-foreground transition-colors duration-300" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors mb-3">
-                      {service.title}
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed mb-4">
-                      {service.description}
-                    </p>
-                    {service.useCases && (
-                      <div className="mb-4">
-                        <p className="text-sm font-semibold text-foreground mb-2">Use Cases:</p>
-                        <p className="text-sm text-muted-foreground">{service.useCases}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {services.map((service, index) => {
+            const getAnimationStyle = (animationType: string, isVisible: boolean) => {
+              const baseDelay = 300 + index * 150;
+              const duration = 0.8;
+              
+              switch (animationType) {
+                case "slideFromLeft":
+                  return {
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? "translateX(0) translateY(0)" : "translateX(-100px) translateY(20px)",
+                    transition: `opacity ${duration}s cubic-bezier(0.4, 0, 0.2, 1) ${baseDelay}ms, transform ${duration}s cubic-bezier(0.4, 0, 0.2, 1) ${baseDelay}ms`,
+                  };
+                case "slideFromRight":
+                  return {
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? "translateX(0) translateY(0)" : "translateX(100px) translateY(20px)",
+                    transition: `opacity ${duration}s cubic-bezier(0.4, 0, 0.2, 1) ${baseDelay}ms, transform ${duration}s cubic-bezier(0.4, 0, 0.2, 1) ${baseDelay}ms`,
+                  };
+                case "fadeScale":
+                  return {
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? "scale(1) translateY(0)" : "scale(0.8) translateY(30px)",
+                    transition: `opacity ${duration}s cubic-bezier(0.4, 0, 0.2, 1) ${baseDelay}ms, transform ${duration}s cubic-bezier(0.4, 0, 0.2, 1) ${baseDelay}ms`,
+                  };
+                case "rotateFade":
+                  return {
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? "rotate(0deg) translateY(0)" : "rotate(-5deg) translateY(30px)",
+                    transition: `opacity ${duration}s cubic-bezier(0.4, 0, 0.2, 1) ${baseDelay}ms, transform ${duration}s cubic-bezier(0.4, 0, 0.2, 1) ${baseDelay}ms`,
+                  };
+                default:
+                  return {
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? "translateY(0)" : "translateY(20px)",
+                    transition: `opacity ${duration}s cubic-bezier(0.4, 0, 0.2, 1) ${baseDelay}ms, transform ${duration}s cubic-bezier(0.4, 0, 0.2, 1) ${baseDelay}ms`,
+                  };
+              }
+            };
+
+            return (
+              <div
+                key={service.title}
+                style={getAnimationStyle(service.animation, isVisible)}
+              >
+                <Card className="service-card bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-glow group cursor-pointer h-full hover:scale-[1.02]">
+                  <CardContent className="p-6 space-y-4 h-full flex flex-col">
+                    <div className="flex items-start gap-4">
+                      <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 flex-shrink-0">
+                        <service.icon className="w-7 h-7 text-primary group-hover:text-primary-foreground transition-colors duration-300" />
                       </div>
-                    )}
-                    <div className="mt-4">
-                      <p className="text-sm font-semibold text-foreground mb-3">Outcomes:</p>
-                      <ul className="space-y-2">
-                        {service.outcomes.map((outcome, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
-                            <span className="text-primary font-bold mt-0.5">✔</span>
-                            <span>{outcome}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors mb-2">
+                          {service.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                          {service.description}
+                        </p>
+                        {service.useCases && (
+                          <div className="mb-3">
+                            <p className="text-xs font-semibold text-foreground mb-1">Use Cases:</p>
+                            <p className="text-xs text-muted-foreground">{service.useCases}</p>
+                          </div>
+                        )}
+                        <div>
+                          <p className="text-xs font-semibold text-foreground mb-2">Outcomes:</p>
+                          <ul className="space-y-1.5">
+                            {service.outcomes.map((outcome, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-xs text-muted-foreground">
+                                <span className="text-primary font-bold mt-0.5">✔</span>
+                                <span>{outcome}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </StaggerContainer>
+                  </CardContent>
+                </Card>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

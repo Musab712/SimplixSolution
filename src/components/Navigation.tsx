@@ -20,8 +20,8 @@ const Navigation = () => {
     { label: "Solutions", href: "#services", id: "services" },
     { label: "Results", href: "#results", id: "results" },
     { label: "Process", href: "#process", id: "process" },
+    { label: "Benefits", href: "#benefits", id: "benefits" },
     { label: "About", href: "#about", id: "about" },
-    { label: "Contact", href: "#contact", id: "contact" },
   ];
 
   const sectionIds = navItems.map((item) => item.id);
@@ -46,8 +46,16 @@ const Navigation = () => {
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
+      // Set hash to prevent scroll spy from incorrectly highlighting sections
+      window.location.hash = href.replace('#', '');
       element.scrollIntoView({ behavior: "smooth" });
       setIsMobileMenuOpen(false);
+      // Clear hash after scroll completes to allow normal scroll spy behavior
+      setTimeout(() => {
+        if (window.location.hash === href.replace('#', '')) {
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+      }, 1000);
     }
   };
 
@@ -157,26 +165,39 @@ const Navigation = () => {
                 </a>
               );
             })}
-            
-            {/* CTA Button with enhanced styling */}
-            <div className="ml-4 relative group">
-              <div className="absolute inset-0 bg-primary rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300 -z-10" />
-              <Button
-                onClick={() => scrollToSection("#contact")}
-                className={cn(
-                  "relative bg-gradient-to-r from-primary to-accent text-primary-foreground",
-                  "hover:from-primary/90 hover:to-accent/90",
-                  "hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)]",
-                  "transition-all duration-300 rounded-lg font-semibold",
-                  "px-6 py-2.5",
-                  "border border-primary/20",
-                  "hover:scale-105 active:scale-95"
-                )}
-              >
-                <span className="relative z-10">Schedule a Call</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
-              </Button>
-            </div>
+          </div>
+
+          {/* CTA Button in corner */}
+          <div className="hidden md:block ml-4 relative group">
+            <div className="absolute inset-0 bg-primary rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300 -z-10" />
+            <Button
+              onClick={() => {
+                // Set hash first to trigger animation
+                window.location.hash = 'contact?action=call';
+                // Small delay to ensure hash is set before scroll
+                setTimeout(() => {
+                  scrollToSection("#contact");
+                }, 100);
+                // Clear hash after animation completes
+                setTimeout(() => {
+                  if (window.location.hash.includes('contact?action=call')) {
+                    window.history.replaceState(null, '', window.location.pathname);
+                  }
+                }, 6000);
+              }}
+              className={cn(
+                "relative bg-gradient-to-r from-primary to-accent text-primary-foreground",
+                "hover:from-primary/90 hover:to-accent/90",
+                "hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)]",
+                "transition-all duration-300 rounded-lg font-semibold",
+                "px-6 py-2.5",
+                "border border-primary/20",
+                "hover:scale-105 active:scale-95"
+              )}
+            >
+              <span className="relative z-10">Schedule a Call</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -279,7 +300,20 @@ const Navigation = () => {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-primary rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300 -z-10" />
                   <Button
-                    onClick={() => scrollToSection("#contact")}
+                    onClick={() => {
+                      // Set hash first to trigger animation
+                      window.location.hash = 'contact?action=call';
+                      // Small delay to ensure hash is set before scroll
+                      setTimeout(() => {
+                        scrollToSection("#contact");
+                      }, 100);
+                      // Clear hash after animation completes
+                      setTimeout(() => {
+                        if (window.location.hash.includes('contact?action=call')) {
+                          window.history.replaceState(null, '', window.location.pathname);
+                        }
+                      }, 6000);
+                    }}
                     className={cn(
                       "w-full relative bg-gradient-to-r from-primary to-accent text-primary-foreground",
                       "hover:from-primary/90 hover:to-accent/90",

@@ -1,4 +1,4 @@
-import { Linkedin, Twitter } from "lucide-react";
+import { Linkedin, Twitter, MapPin } from "lucide-react";
 import Logo from "./Logo";
 
 const Footer = () => {
@@ -48,14 +48,20 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-foreground mb-6 text-lg">Quick Links</h4>
             <ul className="space-y-3">
-              {["Home", "About", "Services", "Contact"].map((item) => (
-                <li key={item}>
+              {[
+                { label: "Home", href: "#home" },
+                { label: "Solutions", href: "#services" },
+                { label: "Benefits", href: "#benefits" },
+                { label: "About", href: "#about" },
+                { label: "Contact", href: "#contact" },
+              ].map((item) => (
+                <li key={item.label}>
                   <button
-                    onClick={() => scrollToSection(`#${item.toLowerCase().replace(" ", "")}`)}
+                    onClick={() => scrollToSection(item.href)}
                     className="text-muted-foreground hover:text-primary transition-all duration-300 hover:translate-x-1 flex items-center gap-2 group"
                   >
                     <span className="w-0 group-hover:w-2 h-0.5 bg-primary transition-all duration-300" />
-                    {item}
+                    {item.label}
                   </button>
                 </li>
               ))}
@@ -78,6 +84,10 @@ const Footer = () => {
               >
                 +61 452231101
               </a>
+              <div className="flex items-start gap-2 text-muted-foreground">
+                <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span className="text-sm">48 Greenlink Boulevard, Harrisdale 6110</span>
+              </div>
               <div className="pt-2">
                 <p className="text-sm text-muted-foreground/70">
                   Monday - Friday: 9:00 AM - 6:00 PM EST

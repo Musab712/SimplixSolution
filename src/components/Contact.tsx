@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, Linkedin, Twitter, Loader2 } from "lucide-react";
+import { Mail, Phone, Linkedin, Twitter, Loader2, MapPin } from "lucide-react";
 import { submitContactForm } from "@/lib/api";
 import { sanitizeName, sanitizeEmail, sanitizePhone, sanitizeMessage } from "@/lib/sanitize";
 
@@ -17,6 +17,73 @@ const Contact = () => {
     phone: "",
     message: "",
   });
+  const [animatePhone, setAnimatePhone] = useState(false);
+  const [animateForm, setAnimateForm] = useState(false);
+  const phoneRef = useRef<HTMLAnchorElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+  const hasAnimatedRef = useRef(false);
+
+  // Check for hash parameters on mount and when hash changes
+  useEffect(() => {
+    const checkHash = () => {
+      const hash = window.location.hash;
+      if (hash.includes('contact?action=call') && !hasAnimatedRef.current) {
+        // Delay to ensure we're scrolled to contact section
+        setTimeout(() => {
+          setAnimatePhone(true);
+          hasAnimatedRef.current = true;
+          setTimeout(() => {
+            setAnimatePhone(false);
+            hasAnimatedRef.current = false;
+          }, 5000);
+        }, 500);
+      } else if (hash.includes('contact?action=demo') && !hasAnimatedRef.current) {
+        // Delay to ensure we're scrolled to contact section
+        setTimeout(() => {
+          setAnimateForm(true);
+          hasAnimatedRef.current = true;
+          setTimeout(() => {
+            setAnimateForm(false);
+            hasAnimatedRef.current = false;
+          }, 5000);
+        }, 500);
+      }
+    };
+
+    // Check on mount
+    checkHash();
+
+    // Poll for hash changes (more reliable than hashchange event)
+    const hashCheckInterval = setInterval(() => {
+      if (!hasAnimatedRef.current) {
+        checkHash();
+      }
+    }, 150);
+
+    // Listen for hash changes
+    const handleHashChange = () => {
+      // Reset flag when hash changes to allow new animation
+      hasAnimatedRef.current = false;
+      setTimeout(() => {
+        checkHash();
+      }, 200);
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    
+    // Also check periodically in case hashchange doesn't fire
+    const periodicCheck = setInterval(() => {
+      if (!hasAnimatedRef.current) {
+        checkHash();
+      }
+    }, 300);
+    
+    return () => {
+      clearInterval(hashCheckInterval);
+      clearInterval(periodicCheck);
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -183,7 +250,12 @@ const Contact = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div className="space-y-6">
-              <div className="p-8 rounded-lg bg-card border border-border">
+              <div 
+                ref={formRef}
+                className={`p-8 rounded-lg bg-card border border-border ${
+                  animateForm ? 'animate-form-highlight' : ''
+                }`}
+              >
                 <h3 className="text-2xl font-bold mb-4 text-foreground">Tell us about your workflows</h3>
                 <p className="text-sm text-muted-foreground mb-6">
                   What you&apos;ll get from the call:
@@ -327,17 +399,35 @@ const Contact = () => {
                     </div>
                   </a>
                   <a
+                    ref={phoneRef}
                     href="tel:+61452231101"
-                    className="flex items-center gap-4 text-muted-foreground hover:text-primary transition-all duration-300 group p-4 rounded-lg hover:bg-primary/5"
+                    className={`flex items-center gap-4 text-muted-foreground hover:text-primary transition-all duration-300 group p-4 rounded-lg hover:bg-primary/5 ${
+                      animatePhone ? 'animate-phone-highlight' : ''
+                    }`}
                   >
-                    <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300 flex-shrink-0">
-                      <Phone className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors duration-300" />
+                    <div className={`w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300 flex-shrink-0 ${
+                      animatePhone ? 'animate-phone-icon' : ''
+                    }`}>
+                      <Phone className={`w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors duration-300 ${
+                        animatePhone ? 'animate-phone-pulse' : ''
+                      }`} />
                     </div>
                     <div>
                       <div className="text-sm text-muted-foreground/70">Phone</div>
-                      <div className="font-semibold text-foreground">+61 452231101</div>
+                      <div className={`font-semibold text-foreground ${
+                        animatePhone ? 'animate-phone-text' : ''
+                      }`}>+61 452231101</div>
                     </div>
                   </a>
+                  <div className="flex items-start gap-4 text-muted-foreground group p-4 rounded-lg">
+                    <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground/70">Address</div>
+                      <div className="font-semibold text-foreground">48 Greenlink Boulevard, Harrisdale 6110</div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -366,6 +456,114 @@ const Contact = () => {
           </div>
         </div>
       </div>
+      
+      {/* Animation styles */}
+      <style>{`
+        @keyframes phone-highlight {
+          0%, 100% { 
+            background-color: transparent;
+            transform: scale(1);
+          }
+          10%, 90% { 
+            background-color: hsl(var(--primary) / 0.1);
+            transform: scale(1.02);
+          }
+          50% { 
+            background-color: hsl(var(--primary) / 0.15);
+            transform: scale(1.05);
+          }
+        }
+        
+        @keyframes phone-icon {
+          0%, 100% { 
+            transform: scale(1) rotate(0deg);
+            background-color: hsl(var(--primary) / 0.1);
+          }
+          25% { 
+            transform: scale(1.2) rotate(5deg);
+            background-color: hsl(var(--primary));
+          }
+          50% { 
+            transform: scale(1.3) rotate(-5deg);
+            background-color: hsl(var(--primary));
+          }
+          75% { 
+            transform: scale(1.2) rotate(5deg);
+            background-color: hsl(var(--primary));
+          }
+        }
+        
+        @keyframes phone-pulse {
+          0%, 100% { 
+            transform: scale(1);
+            color: hsl(var(--primary));
+          }
+          25%, 75% { 
+            transform: scale(1.2);
+            color: hsl(var(--primary-foreground));
+          }
+          50% { 
+            transform: scale(1.3);
+            color: hsl(var(--primary-foreground));
+          }
+        }
+        
+        @keyframes phone-text {
+          0%, 100% { 
+            transform: scale(1);
+            color: hsl(var(--foreground));
+          }
+          25%, 75% { 
+            transform: scale(1.1);
+            color: hsl(var(--primary));
+          }
+          50% { 
+            transform: scale(1.15);
+            color: hsl(var(--primary));
+          }
+        }
+        
+        @keyframes form-highlight {
+          0%, 100% { 
+            background-color: hsl(var(--card));
+            border-color: hsl(var(--border));
+            transform: scale(1);
+            box-shadow: none;
+          }
+          10%, 90% { 
+            background-color: hsl(var(--primary) / 0.05);
+            border-color: hsl(var(--primary) / 0.3);
+            transform: scale(1.01);
+            box-shadow: 0 0 20px hsl(var(--primary) / 0.1);
+          }
+          50% { 
+            background-color: hsl(var(--primary) / 0.08);
+            border-color: hsl(var(--primary) / 0.5);
+            transform: scale(1.02);
+            box-shadow: 0 0 30px hsl(var(--primary) / 0.2);
+          }
+        }
+        
+        .animate-phone-highlight {
+          animation: phone-highlight 5s ease-in-out;
+        }
+        
+        .animate-phone-icon {
+          animation: phone-icon 5s ease-in-out;
+        }
+        
+        .animate-phone-pulse {
+          animation: phone-pulse 5s ease-in-out;
+        }
+        
+        .animate-phone-text {
+          animation: phone-text 5s ease-in-out;
+        }
+        
+        .animate-form-highlight {
+          animation: form-highlight 5s ease-in-out;
+        }
+      `}</style>
     </section>
   );
 };

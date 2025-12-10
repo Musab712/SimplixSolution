@@ -8,7 +8,7 @@ const steps = [
     title: "Discover",
     shortDesc: "Find automation opportunities",
     highlights: ["Workflow audit", "Bottleneck analysis", "Impact assessment"],
-    color: "from-blue-500 to-cyan-500",
+    color: "from-blue-800 to-green-200",
     animation: "slideFromLeft",
   },
   {
@@ -16,7 +16,7 @@ const steps = [
     title: "Design",
     shortDesc: "Map your ideal flows",
     highlights: ["Flow mapping", "Team validation", "Blueprint creation"],
-    color: "from-purple-500 to-pink-500",
+    color: "from-blue-800 to-green-200",
     animation: "slideFromBottom",
   },
   {
@@ -24,7 +24,7 @@ const steps = [
     title: "Build",
     shortDesc: "Implement & integrate",
     highlights: ["Live integration", "Testing & QA", "Technical setup"],
-    color: "from-orange-500 to-red-500",
+    color: "from-blue-800 to-green-200",
     animation: "slideFromRight",
   },
   {
@@ -32,7 +32,7 @@ const steps = [
     title: "Optimize",
     shortDesc: "Monitor & refine",
     highlights: ["Performance tracking", "Continuous improvement", "Scale up"],
-    color: "from-green-500 to-emerald-500",
+    color: "from-blue-800 to-green-200",
     animation: "fadeScale",
   },
 ];

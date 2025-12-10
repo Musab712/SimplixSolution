@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Users, Shield, Heart, Handshake } from "lucide-react";
+import { Users, Shield } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const About = () => {
@@ -140,32 +140,21 @@ const About = () => {
                     <span className="text-primary mt-0.5 font-bold">→</span>
                     <span>We're here for the long haul, not just the launch.</span>
                   </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-primary mt-0.5 font-bold">→</span>
+                    <span>Clear ownership: one lead contact, transparent timelines, and no handoff lag.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-primary mt-0.5 font-bold">→</span>
+                    <span>Quality baked in: staging, test cases, and rollback plans before production changes.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-primary mt-0.5 font-bold">→</span>
+                    <span>Reliability after launch: monitoring, runbooks, and steady iteration to keep automations healthy.</span>
+                  </li>
                 </ul>
               </div>
 
-              <div className="p-6 rounded-xl bg-gradient-to-br from-primary/5 to-accent/5 border border-primary/20">
-                <h3 className="text-xl font-bold mb-4 text-foreground">What Sets Us Apart</h3>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Handshake className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground mb-1">Long-term Relationships</h4>
-                      <p className="text-xs text-muted-foreground">We don't disappear after delivery. We're your ongoing partner.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Heart className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground mb-1">Genuine Care</h4>
-                      <p className="text-xs text-muted-foreground">Your challenges become our challenges. We're invested in your success.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

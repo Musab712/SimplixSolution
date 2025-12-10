@@ -1,10 +1,11 @@
+import path from 'path';
+import dotenv from 'dotenv';
+// Load environment variables before any other imports that rely on them
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import contactRoutes from './routes/contact.js';
-
-// Load environment variables
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -87,8 +88,8 @@ app.use((_req, res) => {
 
 // Error handler - MUST send CORS headers even on errors
 app.use((err: Error, req: express.Request, res: express.Response, _next: express.NextFunction): void => {
+  // Log minimal server-side error info without exposing stack traces to clients
   console.error('❌ Error occurred:', err.message);
-  console.error('   Stack:', err.stack);
 
   // Get the origin from the request
   const origin = req.headers.origin;

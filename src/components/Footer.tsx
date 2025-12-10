@@ -1,4 +1,4 @@
-import { Linkedin, Twitter, MapPin } from "lucide-react";
+import { Linkedin, Twitter, Instagram, MapPin } from "lucide-react";
 import Logo from "./Logo";
 
 const Footer = () => {
@@ -28,7 +28,9 @@ const Footer = () => {
             </p>
             <div className="flex gap-4">
               <a
-                href="#"
+                href="https://www.linkedin.com/company/simplixsolution/"
+                target="_blank"
+                rel="noreferrer"
                 className="w-10 h-10 rounded-lg bg-background border border-border hover:border-primary flex items-center justify-center hover:scale-110 transition-all duration-300 group"
                 aria-label="LinkedIn"
               >
@@ -41,6 +43,13 @@ const Footer = () => {
               >
                 <Twitter className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
               </a>
+              <a
+                href="#"
+                className="w-10 h-10 rounded-lg bg-background border border-border hover:border-primary flex items-center justify-center hover:scale-110 transition-all duration-300 group"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+              </a>
             </div>
           </div>
 
@@ -52,6 +61,8 @@ const Footer = () => {
                 { label: "Home", href: "#home" },
                 { label: "Solutions", href: "#services" },
                 { label: "Benefits", href: "#benefits" },
+                { label: "Results", href: "#results" },
+                { label: "Process", href: "#process" },
                 { label: "About", href: "#about" },
                 { label: "Contact", href: "#contact" },
               ].map((item) => (
@@ -73,10 +84,10 @@ const Footer = () => {
             <h4 className="font-bold text-foreground mb-6 text-lg">Contact Us</h4>
             <div className="space-y-4">
               <a
-                href="mailto:hello@neuronex.ai"
+                href="mailto:info@simplixsolution.com"
                 className="block text-muted-foreground hover:text-primary transition-colors duration-300"
               >
-                hello@neuronex.ai
+                info@simplixsolution.com
               </a>
               <a
                 href="tel:+61452231101"
@@ -87,11 +98,6 @@ const Footer = () => {
               <div className="flex items-start gap-2 text-muted-foreground">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <span className="text-sm">48 Greenlink Boulevard, Harrisdale 6110</span>
-              </div>
-              <div className="pt-2">
-                <p className="text-sm text-muted-foreground/70">
-                  Monday - Friday: 9:00 AM - 6:00 PM EST
-                </p>
               </div>
             </div>
           </div>

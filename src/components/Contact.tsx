@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, Linkedin, Twitter, Loader2, MapPin } from "lucide-react";
+import { Mail, Phone, Linkedin, Twitter, Instagram, Loader2, MapPin } from "lucide-react";
 import { submitContactForm } from "@/lib/api";
 import { sanitizeName, sanitizeEmail, sanitizePhone, sanitizeMessage } from "@/lib/sanitize";
 
@@ -252,19 +252,29 @@ const Contact = () => {
             <div className="space-y-6">
               <div 
                 ref={formRef}
-                className={`p-8 rounded-lg bg-card border border-border ${
+                className={`relative overflow-hidden p-8 rounded-lg bg-card border border-border shadow-sm ${
                   animateForm ? 'animate-form-highlight' : ''
                 }`}
               >
+                <div
+                  className="absolute inset-0 opacity-10 pointer-events-none"
+                  style={{
+                    backgroundImage: "url(/src/assets/cropped_withoutbg.png)",
+                    backgroundSize: "60%",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                    filter: "grayscale(0.1)",
+                  }}
+                />
                 <h3 className="text-2xl font-bold mb-4 text-foreground">Tell us about your workflows</h3>
-                <p className="text-sm text-muted-foreground mb-6">
-                  What you&apos;ll get from the call:
+                <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                  Share a few details and we’ll tailor your automation plan:
                   <br />
-                  – A clear view of what can be automated in your business
+                  • Your tools and key workflows
                   <br />
-                  – Specific ideas for chatbots, voice agents, and workflows
+                  • Biggest bottlenecks or pain points
                   <br />
-                  – Estimated impact on time saved and response times
+                  • What success looks like (speed, quality, CX)
                 </p>
                 <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                   <div className="space-y-2">
@@ -387,7 +397,7 @@ const Contact = () => {
                 <h3 className="text-2xl font-bold mb-6 text-foreground">Contact Information</h3>
                 <div className="space-y-6">
                   <a
-                    href="mailto:hello@neuronex.ai"
+                    href="mailto:info@simplixsolution.com"
                     className="flex items-center gap-4 text-muted-foreground hover:text-primary transition-all duration-300 group p-4 rounded-lg hover:bg-primary/5"
                   >
                     <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300 flex-shrink-0">
@@ -395,7 +405,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <div className="text-sm text-muted-foreground/70">Email</div>
-                      <div className="font-semibold text-foreground">hello@neuronex.ai</div>
+                      <div className="font-semibold text-foreground">info@simplixsolution.com</div>
                     </div>
                   </a>
                   <a
@@ -419,15 +429,20 @@ const Contact = () => {
                       }`}>+61 452231101</div>
                     </div>
                   </a>
-                  <div className="flex items-start gap-4 text-muted-foreground group p-4 rounded-lg">
-                    <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-6 h-6 text-primary" />
+                  <a
+                    href="https://maps.google.com/?q=48+Greenlink+Boulevard+Harrisdale+6110"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-4 text-muted-foreground hover:text-primary transition-all duration-300 group p-4 rounded-lg hover:bg-primary/5"
+                  >
+                    <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+                      <MapPin className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors duration-300" />
                     </div>
                     <div>
                       <div className="text-sm text-muted-foreground/70">Address</div>
                       <div className="font-semibold text-foreground">48 Greenlink Boulevard, Harrisdale 6110</div>
                     </div>
-                  </div>
+                  </a>
                 </div>
               </div>
 
@@ -436,7 +451,9 @@ const Contact = () => {
                 <p className="text-muted-foreground mb-4">Stay connected and get the latest updates</p>
                 <div className="flex gap-4">
                   <a
-                    href="#"
+                    href="https://www.linkedin.com/company/simplixsolution/"
+                    target="_blank"
+                    rel="noreferrer"
                     className="w-14 h-14 rounded-xl bg-card/50 border border-border hover:border-primary flex items-center justify-center hover:scale-110 transition-all duration-300 group"
                     aria-label="LinkedIn"
                   >
@@ -444,10 +461,21 @@ const Contact = () => {
                   </a>
                   <a
                     href="#"
+                    target="_blank"
+                    rel="noreferrer"
                     className="w-14 h-14 rounded-xl bg-card/50 border border-border hover:border-primary flex items-center justify-center hover:scale-110 transition-all duration-300 group"
                     aria-label="Twitter"
                   >
                     <Twitter className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                  </a>
+                  <a
+                    href="#"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-14 h-14 rounded-xl bg-card/50 border border-border hover:border-primary flex items-center justify-center hover:scale-110 transition-all duration-300 group"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
                   </a>
                 </div>
               </div>

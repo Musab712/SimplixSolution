@@ -5,6 +5,14 @@ export interface ContactFormData {
   message: string;
 }
 
+export interface ContactRecord extends ContactFormData {
+  status?: string;
+  notes?: string;
+  submitted_at?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface ContactFormResponse {
   success: boolean;
   message: string;

@@ -15,9 +15,9 @@ const Index = () => {
       <main id="main-content">
         <Hero />
         <Services />
+        <WhatYouGet />
         <Results />
         <Process />
-        <WhatYouGet />
         <About />
         <Contact />
       </main>

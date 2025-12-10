@@ -3,40 +3,40 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const stats = [
   {
-    label: "Fewer repetitive tickets",
-    value: "38%",
-    description: "Average ticket deflection after deploying AI support agents.",
+    label: "Automations deployed",
+    value: "500+",
+    description: "Automations delivered across support, sales, and operations use cases.",
   },
   {
     label: "Faster lead response",
     value: "2.3x",
-    description: "Leads engaged faster with automated qualification and routing.",
+    description: "Speed-to-lead gains with automated qualification and routing.",
   },
   {
-    label: "Workflows automated",
-    value: "40+",
-    description: "End-to-end automations implemented across tools and teams.",
+    label: "Ticket deflection",
+    value: "38%",
+    description: "Repetitive inquiries handled by AI agents; humans focus on edge cases.",
   },
 ];
 
 const testimonials = [
   {
     quote:
-      "We cut our manual support volume by ~40% while improving response times. Their team handled everything from strategy to integration.",
-    name: "Head of Customer Support",
-    company: "B2B SaaS Company",
+      "They mapped our workflows, automated the repetitive steps, and freed our team to focus on higher-value work.",
+    name: "Head of Operations",
+    company: "Mid-market B2B SaaS",
   },
   {
     quote:
-      "They mapped our messy processes and turned them into clear, automated workflows. Our team finally has time for higher‑value work.",
-    name: "COO",
-    company: "Online Services Company",
+      "We respond to leads much faster now. Routing and qualification are automated, so reps get only the right conversations.",
+    name: "VP Sales",
+    company: "Online Services",
   },
   {
     quote:
-      "The AI agents now handle routine queries and lead qualification. We only step in when it truly needs a human.",
-    name: "Operations Lead",
-    company: "Growth-Stage SaaS",
+      "Support volume dropped for repetitive questions while response quality went up. The handoff to humans is seamless.",
+    name: "Head of Support",
+    company: "Enterprise SaaS",
   },
 ];
 
@@ -89,8 +89,7 @@ const Results = () => {
             className={`text-xl text-muted-foreground max-w-3xl mx-auto transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
               }`}
           >
-            Numbers based on combined experience and projects led by our team across previous
-            roles and clients.
+            Metrics from projects delivered by our team across support, sales, and ops.
           </p>
         </div>
 
@@ -128,6 +127,9 @@ const Results = () => {
                 <div className="mt-auto pt-4 border-t border-border/60 text-sm">
                   <div className="font-semibold text-foreground">{t.name}</div>
                   <div className="text-muted-foreground/80">{t.company}</div>
+                  <div className="text-xs text-muted-foreground/60 mt-1">
+                    Select feedback; names anonymized for privacy.
+                  </div>
                 </div>
               </CardContent>
             </Card>

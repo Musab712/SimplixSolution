@@ -18,17 +18,17 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
 
-    /* Vibrant blue accent - modern and energetic */
-    --primary: 216 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    /* Brand palette: white base + blue + sea green */
+    --primary: 215 76% 36%;           /* brighter professional blue for contrast */
+    --primary-foreground: 0 0% 100%;  /* on-blue text */
 
-    --secondary: 0 0% 96%;
+    --secondary: 0 0% 96%;            /* soft card backgrounds */
     --secondary-foreground: 0 0% 9%;
 
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 216 95% 55%;
+    --accent: 164 60% 42%;            /* slightly brighter sea green */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -36,16 +36,16 @@ All colors MUST be HSL.
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 216 100% 50%;
+    --ring: 215 76% 36%;
 
     --radius: 0.75rem;
 
-    /* Modern accent colors - blue theme */
-    --accent-blue: 216 100% 50%;
-    --accent-blue-light: 216 100% 95%;
-    --accent-blue-dark: 216 100% 40%;
-    --gradient-start: 216 100% 50%;
-    --gradient-end: 200 100% 55%;
+    /* Variants for gradients and highlights */
+    --accent-blue: 215 76% 36%;
+    --accent-blue-light: 215 76% 90%;
+    --accent-blue-dark: 215 76% 24%;
+    --gradient-start: 215 76% 36%;   /* start with brand blue */
+    --gradient-end: 164 60% 42%;     /* blend into sea green */
   }
 }
 

@@ -4,11 +4,11 @@ import { ContactFormResponse } from '../types/contact.js';
 
 /**
  * Rate limiting middleware for contact form submissions
- * Limits: 5 successful requests per 15 minutes per IP address
+ * Limits: 5 successful requests per 1 minute per IP address
  * Note: This should be applied AFTER validation, so only valid requests are rate limited
  */
 export const contactFormRateLimit = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 60 * 1000, // 1 minute
   max: 5, // Limit each IP to 5 requests per windowMs
   handler: (_req: Request, res: Response) => {
     const response: ContactFormResponse = {

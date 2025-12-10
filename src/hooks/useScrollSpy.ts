@@ -85,6 +85,21 @@ export const useScrollSpy = ({
         }
       });
 
+      // If we've scrolled past the last tracked section, clear the active state
+      const lastId = sectionIds[sectionIds.length - 1];
+      if (lastId) {
+        const lastEl = document.querySelector<HTMLElement>(`#${lastId}`);
+        if (lastEl) {
+          const lastRect = lastEl.getBoundingClientRect();
+          const lastBottom = window.scrollY + lastRect.bottom;
+          const viewportBottom = window.scrollY + window.innerHeight;
+          if (viewportBottom > lastBottom + 100) {
+            if (activeSection !== "") setActiveSection("");
+            return;
+          }
+        }
+      }
+
       // Update active section if we found one
       if (activeId) {
         setActiveSection((prev) => {
@@ -141,7 +156,7 @@ export const useScrollSpy = ({
     };
   }, [sectionIds, threshold, rootMargin, offset]);
 
-  // Return home as default if no active section is set yet
-  return activeSection || sectionIds[0] || "";
+  // Allow no active section (e.g., after last section)
+  return activeSection;
 };
 

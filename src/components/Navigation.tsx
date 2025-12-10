@@ -18,13 +18,14 @@ const Navigation = () => {
   const navItems = [
     { label: "Home", href: "#home", id: "home" },
     { label: "Solutions", href: "#services", id: "services" },
+    { label: "Benefits", href: "#benefits", id: "benefits" },
     { label: "Results", href: "#results", id: "results" },
     { label: "Process", href: "#process", id: "process" },
-    { label: "Benefits", href: "#benefits", id: "benefits" },
     { label: "About", href: "#about", id: "about" },
   ];
 
-  const sectionIds = navItems.map((item) => item.id);
+  // Track contact as the terminal section so highlights clear after About
+  const sectionIds = [...navItems.map((item) => item.id), "contact"];
   const activeSection = useScrollSpy({
     sectionIds,
     threshold: 0.3,
@@ -223,7 +224,7 @@ const Navigation = () => {
           <SheetOverlay className="bg-black/60 backdrop-blur-md" />
           <SheetContent
             side="right"
-            className="w-full sm:w-80 p-0 bg-background/95 backdrop-blur-xl border-l border-border/50"
+            className="w-full sm:w-80 p-0 bg-background/95 backdrop-blur-xl border-l border-border/50 [&>button]:hidden"
             onOpenAutoFocus={(e) => e.preventDefault()}
           >
             <div className="flex flex-col h-full relative overflow-hidden">

@@ -1,6 +1,6 @@
 # Backend API
 
-This is the backend API for the Apex Automate website. It handles contact form submissions and triggers n8n workflows.
+This is the backend API for the Apex Automate website. It handles contact form submissions and can be extended to forward leads to email, CRM, or other services.
 
 ## Setup
 
@@ -15,7 +15,6 @@ cp .env.example .env
 ```
 
 3. Update the `.env` file with your configuration:
-   - `N8N_WEBHOOK_URL`: Your n8n workflow webhook URL
    - `FRONTEND_URL`: Your frontend URL (default: http://localhost:8080)
    - `PORT`: Backend server port (default: 3000)
 
@@ -79,24 +78,6 @@ Health check endpoint.
 }
 ```
 
-## n8n Integration
-
-The backend triggers an n8n webhook when a contact form is submitted. The webhook receives the following payload:
-
-```json
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "phone": "+1234567890",
-  "message": "Your message here",
-  "submittedAt": "2024-01-01T00:00:00.000Z"
-}
-```
-
-Make sure your n8n workflow is configured to:
-1. Receive POST requests at the webhook URL
-2. Store the data in Supabase (or perform other actions)
-
 ## Building for Production
 
 Build the TypeScript code:
@@ -114,5 +95,4 @@ npm start
 - `PORT`: Server port (default: 3000)
 - `NODE_ENV`: Environment (development/production)
 - `FRONTEND_URL`: Frontend URL for CORS configuration
-- `N8N_WEBHOOK_URL`: n8n workflow webhook URL (required)
 

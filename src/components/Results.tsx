@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useAnimatedCounter } from "@/hooks/useAnimatedCounter";
 
 const stats = [
   {
@@ -45,6 +46,27 @@ const tools = ["HubSpot", "Salesforce", "Intercom", "Slack", "Notion", "Zendesk"
 const Results = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const automationCount = useAnimatedCounter({
+    target: 500,
+    duration: 2500,
+    startDelay: 300, // Match the delay of the stats section
+    enabled: isVisible,
+    precision: 0,
+  });
+  const leadResponseCount = useAnimatedCounter({
+    target: 2.3,
+    duration: 2500,
+    startDelay: 300,
+    enabled: isVisible,
+    precision: 1,
+  });
+  const ticketDeflectionCount = useAnimatedCounter({
+    target: 38,
+    duration: 2500,
+    startDelay: 300,
+    enabled: isVisible,
+    precision: 0,
+  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -98,10 +120,16 @@ const Results = () => {
           className={`grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 transition-all duration-700 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
         >
-          {stats.map((stat) => (
+          {stats.map((stat, index) => (
             <div key={stat.label} className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                {stat.value}
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2 tabular-nums">
+                {index === 0
+                  ? `${automationCount}+`
+                  : index === 1
+                    ? `${leadResponseCount.toFixed(1)}x`
+                    : index === 2
+                      ? `${ticketDeflectionCount}%`
+                      : stat.value}
               </div>
               <div className="text-sm font-semibold uppercase tracking-wide text-muted-foreground/80">
                 {stat.label}
@@ -127,9 +155,6 @@ const Results = () => {
                 <div className="mt-auto pt-4 border-t border-border/60 text-sm">
                   <div className="font-semibold text-foreground">{t.name}</div>
                   <div className="text-muted-foreground/80">{t.company}</div>
-                  <div className="text-xs text-muted-foreground/60 mt-1">
-                    Select feedback; names anonymized for privacy.
-                  </div>
                 </div>
               </CardContent>
             </Card>

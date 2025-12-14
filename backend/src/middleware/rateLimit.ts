@@ -13,7 +13,7 @@ export const contactFormRateLimit = rateLimit({
   handler: (_req: Request, res: Response) => {
     const response: ContactFormResponse = {
       success: false,
-      message: 'Too many form submissions. Please try again in 15 minutes.',
+      message: 'Too many form submissions. Please try again in 1 minute.',
     };
     res.status(429).json(response);
   },

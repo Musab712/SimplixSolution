@@ -1,4 +1,4 @@
-import { Linkedin, Twitter, Instagram, MapPin } from "lucide-react";
+import { Linkedin, Instagram, MapPin, Facebook } from "lucide-react";
 import Logo from "./Logo";
 
 const Footer = () => {
@@ -15,7 +15,7 @@ const Footer = () => {
     <footer className="bg-card border-t border-border py-16 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-background/50" />
-      
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* Company Info */}
@@ -37,14 +37,18 @@ const Footer = () => {
                 <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
               </a>
               <a
-                href="#"
+                href="https://www.facebook.com/share/1BA6U3rZ9Q/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noreferrer"
                 className="w-10 h-10 rounded-lg bg-background border border-border hover:border-primary flex items-center justify-center hover:scale-110 transition-all duration-300 group"
-                aria-label="Twitter"
+                aria-label="Facebook"
               >
-                <Twitter className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <Facebook className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/simplixsolution_/"
+                target="_blank"
+                rel="noreferrer"
                 className="w-10 h-10 rounded-lg bg-background border border-border hover:border-primary flex items-center justify-center hover:scale-110 transition-all duration-300 group"
                 aria-label="Instagram"
               >
@@ -97,7 +101,7 @@ const Footer = () => {
               </a>
               <div className="flex items-start gap-2 text-muted-foreground">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span className="text-sm">48 Greenlink Boulevard, Harrisdale 6110</span>
+                <span className="text-sm">Perth, Western Australia, Australia</span>
               </div>
             </div>
           </div>
@@ -105,8 +109,8 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="pt-8 border-t border-border/50 text-center">
-            <p className="text-muted-foreground">
-              &copy; {currentYear} Simplix Solution. All rights reserved.
+          <p className="text-muted-foreground">
+            &copy; {currentYear} Simplix Solution. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground/70 mt-2">
             Built with innovation and powered by AI

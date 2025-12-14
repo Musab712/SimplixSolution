@@ -1,12 +1,11 @@
 # Simple Solution - Agency Website
 
-A modern, responsive agency website built with React and TypeScript, featuring a contact form integrated with n8n workflows for automated lead management.
+A modern, responsive agency website built with React and TypeScript, featuring a secure contact form for lead capture.
 
 ## 🚀 Features
 
 - **Modern UI/UX**: Beautiful, responsive design with smooth animations
 - **Contact Form**: Integrated contact form with validation and sanitization
-- **n8n Integration**: Automated workflow triggers for lead management
 - **Security**: Rate limiting, input validation, and XSS protection
 - **Performance**: Optimized with Vite for fast development and builds
 - **Accessibility**: WCAG compliant with keyboard navigation support
@@ -39,12 +38,8 @@ A modern, responsive agency website built with React and TypeScript, featuring a
 - **Node.js** - Runtime environment
 - **Express** - Web framework
 - **TypeScript** - Type safety
-- **Axios** - HTTP client for n8n integration
 - **express-rate-limit** - Rate limiting middleware
 - **CORS** - Cross-origin resource sharing
-
-### Integrations
-- **n8n** - Workflow automation platform
 
 ## 📁 Project Structure
 
@@ -55,7 +50,7 @@ simple-solution-main/
 │   │   ├── controllers/    # Request handlers
 │   │   ├── middleware/     # Rate limiting, validation, sanitization
 │   │   ├── routes/         # API routes
-│   │   ├── services/       # Business logic (n8n integration)
+│   │   ├── services/       # Business logic for external calls
 │   │   └── types/          # TypeScript type definitions
 │   ├── .env.example        # Environment variables template
 │   └── package.json
@@ -81,7 +76,6 @@ simple-solution-main/
 ### Prerequisites
 
 - **Node.js** 18+ and npm (or use [nvm](https://github.com/nvm-sh/nvm))
-- **n8n account** with a webhook workflow set up
 
 ### Installation
 
@@ -113,7 +107,6 @@ simple-solution-main/
    
    Edit `backend/.env`:
    ```env
-   N8N_WEBHOOK_URL=your-n8n-webhook-url-here
    FRONTEND_URL=http://localhost:8080
    PORT=3000
    NODE_ENV=development
@@ -150,7 +143,6 @@ simple-solution-main/
 
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
-| `N8N_WEBHOOK_URL` | Your n8n workflow webhook URL | ✅ Yes | - |
 | `FRONTEND_URL` | Frontend URL for CORS (comma-separated for multiple) | No | `http://localhost:8080` |
 | `PORT` | Backend server port | No | `3000` |
 | `NODE_ENV` | Environment mode | No | `development` |
@@ -251,26 +243,6 @@ Health check endpoint.
 }
 ```
 
-### n8n Integration
-
-When a contact form is submitted, the backend sends a POST request to your n8n webhook with the following payload:
-
-```json
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "phone": "+1234567890",
-  "message": "Your message here",
-  "submittedAt": "2024-01-01T00:00:00.000Z"
-}
-```
-
-**n8n Workflow Setup:**
-1. Create a webhook trigger node in n8n
-2. Configure it to accept POST requests
-3. Copy the webhook URL to `N8N_WEBHOOK_URL` in your backend `.env`
-4. Add nodes to process the data (e.g., save to database, send email)
-
 ## 🏗 Building for Production
 
 ### Frontend
@@ -327,7 +299,6 @@ VITE_API_URL=https://your-backend-url.com/api
 
 Update your backend environment variables:
 ```env
-N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/...
 FRONTEND_URL=https://your-frontend-url.com
 PORT=3000
 NODE_ENV=production
@@ -372,7 +343,6 @@ For issues and questions, please open an issue on [GitHub](https://github.com/Mu
 ## 🙏 Acknowledgments
 
 - [shadcn/ui](https://ui.shadcn.com/) for the component library
-- [n8n](https://n8n.io/) for workflow automation
 - [Vite](https://vitejs.dev/) for the build tool
 
 ---

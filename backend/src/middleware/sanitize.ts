@@ -29,16 +29,16 @@ const normalizeWhitespace = (input: string): string => {
  */
 const sanitizeString = (value: string, preserveLineBreaks = false): string => {
   if (typeof value !== 'string') return value;
-  
+
   let sanitized = removeScripts(stripHtmlTags(value));
-  
+
   if (preserveLineBreaks) {
     // For messages, preserve line breaks but normalize other whitespace
     sanitized = sanitized.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n');
   } else {
     sanitized = normalizeWhitespace(sanitized);
   }
-  
+
   return sanitized.trim();
 };
 
@@ -55,6 +55,11 @@ export const sanitizeInput = (
     // Sanitize name
     if (req.body.name && typeof req.body.name === 'string') {
       req.body.name = sanitizeString(req.body.name);
+    }
+
+    // Sanitize company
+    if (req.body.company && typeof req.body.company === 'string') {
+      req.body.company = sanitizeString(req.body.company);
     }
 
     // Sanitize email (less aggressive, just remove HTML)

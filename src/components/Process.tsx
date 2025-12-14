@@ -65,7 +65,7 @@ const Process = () => {
   const getAnimationStyle = (animationType: string, isVisible: boolean, index: number) => {
     const baseDelay = 200 + index * 150;
     const duration = 0.8;
-    
+
     switch (animationType) {
       case "slideFromLeft":
         return {
@@ -125,16 +125,8 @@ const Process = () => {
           </p>
         </div>
 
-        {/* Process Steps with Timeline */}
+        {/* Process Steps */}
         <div className="relative max-w-6xl mx-auto">
-          {/* Connecting Line (Desktop only) */}
-          <div className="hidden md:block absolute top-24 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20" 
-               style={{ 
-                 opacity: isVisible ? 1 : 0,
-                 transition: `opacity 1s ease-in-out ${600}ms`
-               }} 
-          />
-
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 lg:gap-4">
             {steps.map((step, index) => (
               <div
@@ -151,12 +143,13 @@ const Process = () => {
 
                 {/* Arrow between steps (Desktop only) */}
                 {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-24 -right-2 z-10"
-                       style={{
-                         opacity: isVisible ? 1 : 0,
-                         transform: isVisible ? "translateX(0)" : "translateX(-20px)",
-                         transition: `opacity 0.6s ease-in-out ${600 + index * 150}ms, transform 0.6s ease-in-out ${600 + index * 150}ms`
-                       }}
+                  <div
+                    className="hidden md:block absolute top-1/2 -translate-y-1/2 -right-5 z-10"
+                    style={{
+                      opacity: isVisible ? 1 : 0,
+                      transform: isVisible ? "translateX(0)" : "translateX(-20px)",
+                      transition: `opacity 0.6s ease-in-out ${600 + index * 150}ms, transform 0.6s ease-in-out ${600 + index * 150}ms`,
+                    }}
                   >
                     <ArrowRight className="w-6 h-6 text-primary/40" />
                   </div>

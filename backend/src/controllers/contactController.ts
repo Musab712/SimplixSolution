@@ -15,6 +15,7 @@ export const submitContactForm = async (
     // Insert into Supabase
     const { error: dbError } = await supabase.from('contacts').insert({
       name: formData.name,
+      company: formData.company,
       email: formData.email,
       phone: formData.phone || null,
       message: formData.message,

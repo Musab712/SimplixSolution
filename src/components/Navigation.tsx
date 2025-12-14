@@ -72,7 +72,7 @@ const Navigation = () => {
       )}
     >
       {/* Animated gradient border effect */}
-      <div 
+      <div
         className={cn(
           "absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r transition-opacity duration-500",
           "from-transparent via-primary/50 to-transparent",
@@ -84,9 +84,9 @@ const Navigation = () => {
           animation: "gradient-shift 3s ease infinite"
         }}
       />
-      
+
       {/* Subtle animated background gradient */}
-      <div 
+      <div
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
           background: `
@@ -115,7 +115,7 @@ const Navigation = () => {
           </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden min-[986px]:flex items-center space-x-1">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -142,12 +142,12 @@ const Navigation = () => {
                       isActive && "scale-100 bg-primary/10"
                     )}
                   />
-                  
+
                   {/* Active indicator */}
                   {isActive && (
                     <span className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent rounded-lg" />
                   )}
-                  
+
                   {/* Text with shimmer effect on active */}
                   <span className={cn(
                     "relative z-10 block",
@@ -155,7 +155,7 @@ const Navigation = () => {
                   )}>
                     {item.label}
                   </span>
-                  
+
                   {/* Bottom indicator line */}
                   <span
                     className={cn(
@@ -169,7 +169,7 @@ const Navigation = () => {
           </div>
 
           {/* CTA Button in corner */}
-          <div className="hidden md:block ml-4 relative group">
+          <div className="hidden min-[986px]:block ml-4 relative group">
             <div className="absolute inset-0 bg-primary rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity duration-300 -z-10" />
             <Button
               onClick={() => {
@@ -203,12 +203,12 @@ const Navigation = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden relative p-2 rounded-lg text-foreground hover:text-primary transition-all duration-300 hover:bg-primary/10 group"
+            className="min-[986px]:hidden relative p-2 rounded-lg text-foreground hover:text-primary transition-all duration-300 hover:bg-primary/10 group"
             onClick={() => setIsMobileMenuOpen(true)}
             aria-label="Toggle menu"
           >
-            <Menu 
-              size={24} 
+            <Menu
+              size={24}
               className={cn(
                 "transition-all duration-300",
                 "group-hover:rotate-90"
@@ -229,7 +229,7 @@ const Navigation = () => {
           >
             <div className="flex flex-col h-full relative overflow-hidden">
               {/* Animated background gradient */}
-              <div 
+              <div
                 className="absolute inset-0 opacity-[0.03] pointer-events-none"
                 style={{
                   background: `
@@ -238,7 +238,7 @@ const Navigation = () => {
                   `,
                 }}
               />
-              
+
               {/* Header */}
               <div className="px-6 py-8 border-b border-border/50 relative z-10">
                 <div className="flex items-center justify-between">

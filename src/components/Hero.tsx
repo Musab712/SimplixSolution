@@ -5,9 +5,24 @@ import ParticleNetwork from "./ParticleNetwork";
 import MagneticButton from "./MagneticButton";
 import StaggeredText from "./StaggeredText";
 import TypingText from "./TypingText";
+import { useAnimatedCounter } from "@/hooks/useAnimatedCounter";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const automationCount = useAnimatedCounter({
+    target: 500,
+    duration: 2500,
+    startDelay: 700, // Match the delay of the stats section
+    enabled: isVisible,
+    precision: 0,
+  });
+  const satisfactionCount = useAnimatedCounter({
+    target: 98,
+    duration: 2500,
+    startDelay: 700,
+    enabled: isVisible,
+    precision: 0,
+  });
 
   useEffect(() => {
     setIsVisible(true);
@@ -446,12 +461,14 @@ const Hero = () => {
           {/* Stats */}
           <div className={`grid grid-cols-3 gap-8 mt-16 max-w-3xl mx-auto transition-all duration-1000 delay-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
             <div className="text-center group hover:scale-105 transition-transform duration-300">
-              <div className="text-3xl font-bold text-primary">500+</div>
+              <div className="text-3xl font-bold text-primary tabular-nums">
+                {automationCount}+
+              </div>
               <div className="text-sm text-muted-foreground mt-1 font-medium">Automations Deployed</div>
               <div className="text-xs text-muted-foreground/60 mt-0.5">Across 50+ industries</div>
             </div>
             <div className="text-center group hover:scale-105 transition-transform duration-300">
-              <div className="text-3xl font-bold text-primary">98%</div>
+              <div className="text-3xl font-bold text-primary tabular-nums">{satisfactionCount}%</div>
               <div className="text-sm text-muted-foreground mt-1 font-medium">Client Satisfaction</div>
               <div className="text-xs text-muted-foreground/60 mt-0.5">Based on retention</div>
             </div>

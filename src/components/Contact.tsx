@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, Linkedin, Twitter, Instagram, Loader2, MapPin } from "lucide-react";
+import { Mail, Phone, Linkedin, Instagram, Loader2, MapPin, Facebook } from "lucide-react";
 import { submitContactForm } from "@/lib/api";
 import { sanitizeName, sanitizeEmail, sanitizePhone, sanitizeMessage } from "@/lib/sanitize";
 
@@ -13,6 +13,7 @@ const Contact = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     name: "",
+    company: "",
     email: "",
     phone: "",
     message: "",
@@ -70,14 +71,14 @@ const Contact = () => {
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    
+
     // Also check periodically in case hashchange doesn't fire
     const periodicCheck = setInterval(() => {
       if (!hasAnimatedRef.current) {
         checkHash();
       }
     }, 300);
-    
+
     return () => {
       clearInterval(hashCheckInterval);
       clearInterval(periodicCheck);
@@ -96,6 +97,16 @@ const Contact = () => {
       newErrors.name = "Name must be at least 2 characters";
     } else if (nameTrimmed.length > 100) {
       newErrors.name = "Name must be less than 100 characters";
+    }
+
+    // Company validation
+    const companyTrimmed = formData.company.trim();
+    if (!companyTrimmed) {
+      newErrors.company = "Company is required";
+    } else if (companyTrimmed.length < 2) {
+      newErrors.company = "Company must be at least 2 characters";
+    } else if (companyTrimmed.length > 150) {
+      newErrors.company = "Company must be less than 150 characters";
     }
 
     // Email validation
@@ -155,6 +166,7 @@ const Contact = () => {
     try {
       const response = await submitContactForm({
         name: formData.name.trim(),
+        company: formData.company.trim(),
         email: formData.email.trim(),
         phone: formData.phone.trim() || undefined,
         message: formData.message.trim(),
@@ -166,7 +178,7 @@ const Contact = () => {
       });
 
       // Reset form on success
-      setFormData({ name: "", email: "", phone: "", message: "" });
+      setFormData({ name: "", company: "", email: "", phone: "", message: "" });
       setErrors({});
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Failed to send message. Please try again later.";
@@ -193,11 +205,12 @@ const Contact = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    
+
     // Apply sanitization based on field type
     let sanitizedValue = value;
     switch (name) {
       case 'name':
+      case 'company':
         sanitizedValue = sanitizeName(value);
         break;
       case 'email':
@@ -213,7 +226,7 @@ const Contact = () => {
       default:
         sanitizedValue = value;
     }
-    
+
     setFormData(prev => ({
       ...prev,
       [name]: sanitizedValue,
@@ -250,11 +263,10 @@ const Contact = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div className="space-y-6">
-              <div 
+              <div
                 ref={formRef}
-                className={`relative overflow-hidden p-8 rounded-lg bg-card border border-border shadow-sm ${
-                  animateForm ? 'animate-form-highlight' : ''
-                }`}
+                className={`relative overflow-hidden p-8 rounded-lg bg-card border border-border shadow-sm ${animateForm ? 'animate-form-highlight' : ''
+                  }`}
               >
                 <div
                   className="absolute inset-0 opacity-10 pointer-events-none"
@@ -296,6 +308,29 @@ const Contact = () => {
                     {errors.name && (
                       <p id="name-error" className="text-xs text-destructive animate-fade-in-up">
                         {errors.name}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="company" className="text-sm font-medium text-foreground">
+                      Company Name <span className="text-destructive">*</span>
+                    </label>
+                    <Input
+                      id="company"
+                      type="text"
+                      name="company"
+                      placeholder="Acme Inc."
+                      value={formData.company}
+                      onChange={handleChange}
+                      maxLength={150}
+                      className={`bg-background/50 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 h-12 placeholder:text-muted-foreground/70 ${errors.company ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
+                      aria-invalid={!!errors.company}
+                      aria-describedby={errors.company ? "company-error" : undefined}
+                    />
+                    {errors.company && (
+                      <p id="company-error" className="text-xs text-destructive animate-fade-in-up">
+                        {errors.company}
                       </p>
                     )}
                   </div>
@@ -411,26 +446,22 @@ const Contact = () => {
                   <a
                     ref={phoneRef}
                     href="tel:+61452231101"
-                    className={`flex items-center gap-4 text-muted-foreground hover:text-primary transition-all duration-300 group p-4 rounded-lg hover:bg-primary/5 ${
-                      animatePhone ? 'animate-phone-highlight' : ''
-                    }`}
+                    className={`flex items-center gap-4 text-muted-foreground hover:text-primary transition-all duration-300 group p-4 rounded-lg hover:bg-primary/5 ${animatePhone ? 'animate-phone-highlight' : ''
+                      }`}
                   >
-                    <div className={`w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300 flex-shrink-0 ${
-                      animatePhone ? 'animate-phone-icon' : ''
-                    }`}>
-                      <Phone className={`w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors duration-300 ${
-                        animatePhone ? 'animate-phone-pulse' : ''
-                      }`} />
+                    <div className={`w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300 flex-shrink-0 ${animatePhone ? 'animate-phone-icon' : ''
+                      }`}>
+                      <Phone className={`w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors duration-300 ${animatePhone ? 'animate-phone-pulse' : ''
+                        }`} />
                     </div>
                     <div>
                       <div className="text-sm text-muted-foreground/70">Phone</div>
-                      <div className={`font-semibold text-foreground ${
-                        animatePhone ? 'animate-phone-text' : ''
-                      }`}>+61 452231101</div>
+                      <div className={`font-semibold text-foreground ${animatePhone ? 'animate-phone-text' : ''
+                        }`}>+61 452231101</div>
                     </div>
                   </a>
                   <a
-                    href="https://maps.google.com/?q=48+Greenlink+Boulevard+Harrisdale+6110"
+                    href="https://maps.google.com/?q=Perth+Western+Australia+Australia"
                     target="_blank"
                     rel="noreferrer"
                     className="flex items-center gap-4 text-muted-foreground hover:text-primary transition-all duration-300 group p-4 rounded-lg hover:bg-primary/5"
@@ -440,7 +471,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <div className="text-sm text-muted-foreground/70">Address</div>
-                      <div className="font-semibold text-foreground">48 Greenlink Boulevard, Harrisdale 6110</div>
+                      <div className="font-semibold text-foreground">Perth, Western Australia, Australia</div>
                     </div>
                   </a>
                 </div>
@@ -460,16 +491,16 @@ const Contact = () => {
                     <Linkedin className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
                   </a>
                   <a
-                    href="#"
+                    href="https://www.facebook.com/share/1BA6U3rZ9Q/?mibextid=wwXIfr"
                     target="_blank"
                     rel="noreferrer"
                     className="w-14 h-14 rounded-xl bg-card/50 border border-border hover:border-primary flex items-center justify-center hover:scale-110 transition-all duration-300 group"
-                    aria-label="Twitter"
+                    aria-label="Facebook"
                   >
-                    <Twitter className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <Facebook className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
                   </a>
                   <a
-                    href="#"
+                    href="https://www.instagram.com/simplixsolution_/"
                     target="_blank"
                     rel="noreferrer"
                     className="w-14 h-14 rounded-xl bg-card/50 border border-border hover:border-primary flex items-center justify-center hover:scale-110 transition-all duration-300 group"
@@ -484,7 +515,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Animation styles */}
       <style>{`
         @keyframes phone-highlight {

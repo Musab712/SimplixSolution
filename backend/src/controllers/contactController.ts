@@ -34,26 +34,30 @@ export const submitContactForm = async (
       return;
     }
 
-    // Send email notification (do not fail request if email fails)
-    try {
-      await sendContactNotification({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        message: formData.message,
-        submittedAt,
-      });
-    } catch (emailError) {
-      console.error('Email send error:', emailError instanceof Error ? emailError.message : emailError);
-      // Do not return failure if email fails; the submission is stored
-    }
-
+    // Send success response immediately (don't wait for email)
     const response: ContactFormResponse = {
       success: true,
       message: 'Your message has been sent successfully! We will get back to you soon.',
     };
 
     res.status(200).json(response);
+
+    // Send email notification asynchronously AFTER response is sent
+    // This prevents the email from blocking the response
+    setImmediate(async () => {
+      try {
+        await sendContactNotification({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message,
+          submittedAt,
+        });
+      } catch (emailError) {
+        console.error('Email send error (non-blocking):', emailError instanceof Error ? emailError.message : emailError);
+        // Email failure doesn't affect the user - data is already saved
+      }
+    });
   } catch (error) {
     console.error('Contact form submission error:', error instanceof Error ? error.message : error);
 

@@ -17,6 +17,16 @@ export interface EmailPayload {
   submittedAt: string;
 }
 
+// Helper function to add timeout to promises
+const withTimeout = <T>(promise: Promise<T>, timeoutMs: number): Promise<T> => {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error(`Operation timed out after ${timeoutMs}ms`)), timeoutMs)
+    ),
+  ]);
+};
+
 export const sendContactNotification = async (payload: EmailPayload): Promise<void> => {
   if (!ZEPTOMAIL_TO || !ZEPTOMAIL_USER || !ZEPTOMAIL_API_KEY) {
     console.warn('ZeptoMail not fully configured; skipping email send.');
@@ -37,6 +47,14 @@ export const sendContactNotification = async (payload: EmailPayload): Promise<vo
       user: ZEPTOMAIL_USER,
       pass: ZEPTOMAIL_API_KEY,
     },
+    // Add connection timeout settings to prevent 2-minute hangs
+    connectionTimeout: 10000, // 10 seconds
+    greetingTimeout: 5000, // 5 seconds
+    socketTimeout: 10000, // 10 seconds
+    // Additional timeout settings
+    pool: false, // Don't use connection pooling
+    maxConnections: 1,
+    maxMessages: 1,
   });
 
   const mailOptions = {
@@ -55,5 +73,12 @@ export const sendContactNotification = async (payload: EmailPayload): Promise<vo
     ].join('\n'),
   };
 
-  await transporter.sendMail(mailOptions);
+  // Wrap sendMail with a timeout (10 seconds total)
+  try {
+    await withTimeout(transporter.sendMail(mailOptions), 10000);
+    console.log('✅ Email notification sent successfully');
+  } catch (error) {
+    console.error('❌ Email send error:', error instanceof Error ? error.message : error);
+    throw error; // Re-throw so caller knows it failed
+  }
 };

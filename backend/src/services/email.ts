@@ -55,7 +55,7 @@ export const sendContactNotification = async (payload: EmailPayload): Promise<vo
     pool: false, // Don't use connection pooling
     maxConnections: 1,
     maxMessages: 1,
-  });
+  } as any);
 
   const mailOptions = {
     from: fromAddress,

@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 
 const {
   ZEPTOMAIL_HOST = 'smtp.zeptomail.com',
-  ZEPTOMAIL_PORT = '587',
+  ZEPTOMAIL_PORT = '465',
   ZEPTOMAIL_USER,
   ZEPTOMAIL_API_KEY,
   ZEPTOMAIL_FROM,
@@ -47,15 +47,20 @@ export const sendContactNotification = async (payload: EmailPayload): Promise<vo
       user: ZEPTOMAIL_USER,
       pass: ZEPTOMAIL_API_KEY,
     },
-    // Add connection timeout settings to prevent 2-minute hangs
-    connectionTimeout: 10000, // 10 seconds
-    greetingTimeout: 5000, // 5 seconds
-    socketTimeout: 10000, // 10 seconds
-    // Additional timeout settings
-    pool: false, // Don't use connection pooling
+    // Add connection timeout settings
+    connectionTimeout: 30000, // 30 seconds
+    greetingTimeout: 30000, // 30 seconds
+    socketTimeout: 30000, // 30 seconds
+    // Debug logging
+    logger: true,
+    debug: true,
+    // Additional settings
+    pool: false,
     maxConnections: 1,
     maxMessages: 1,
   } as any);
+
+  console.log(`Attempting to send email via ${ZEPTOMAIL_HOST}:${ZEPTOMAIL_PORT} as ${ZEPTOMAIL_USER}...`);
 
   const mailOptions = {
     from: fromAddress,
@@ -73,12 +78,14 @@ export const sendContactNotification = async (payload: EmailPayload): Promise<vo
     ].join('\n'),
   };
 
-  // Wrap sendMail with a timeout (10 seconds total)
+  // Wrap sendMail with a timeout (30 seconds total)
   try {
-    await withTimeout(transporter.sendMail(mailOptions), 10000);
+    await withTimeout(transporter.sendMail(mailOptions), 30000);
     console.log('✅ Email notification sent successfully');
   } catch (error) {
     console.error('❌ Email send error:', error instanceof Error ? error.message : error);
-    throw error; // Re-throw so caller knows it failed
+    // Log full error details for debugging
+    console.error('Full error details:', JSON.stringify(error, null, 2));
+    throw error;
   }
 };
